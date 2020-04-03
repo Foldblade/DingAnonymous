@@ -136,9 +136,9 @@
         </div>
         <div style="background:rgba(0, 0, 0, 0.15);" class="mdui-p-y-1 mdui-typo">
             <div class="mdui-container">
-                <span class="mdui-text-color-theme-secondary">© <?php echo date("Y"); ?> By <a class="mdui-text-color-theme-secondary" href="https://github.com/foldblade">FoldBlade</a></span>
+                <span class="mdui-text-color-theme-secondary">© <?php echo date("Y"); ?> By <a class="mdui-text-color-theme-secondary" href="https://github.com/FoldBlade">FoldBlade</a></span>
                 <span class="mdui-text-color-theme-secondary mdui-float-right">Open Source on
-                <a class="mdui-text-color-theme-secondary" target="_blank" href="https://github.com/foldblade">Github</a>
+                <a class="mdui-text-color-theme-secondary" target="_blank" href="https://github.com/Foldblade/DingAnonymous">Github</a>
                 </span>
             </div>
         </div>
