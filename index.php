@@ -129,7 +129,7 @@
                     <h4>Ding Anonymous 匿名钉<br /><small>钉钉可用的匿名机器人服务</small></h4>
                     <p class="mdui-text-color-theme-secondary mdui-typo-caption-opacity">本站需使用如Firefox或Chrome等现代浏览器，方有完整浏览体验。如遇功能缺失，请更换您的浏览器再试。
                     <p class="mdui-text-color-theme-secondary mdui-typo-caption-opacity">本站的代码可于
-                        <a class="mdui-text-color-theme-secondary" target="_blank" href="https://policies.google.cn/privacy">Github</a> 查看。
+                        <a class="mdui-text-color-theme-secondary" target="_blank" href="https://github.com/Foldblade/DingAnonymous">Github</a> 查看。
                     </p>
                 </div>
             </div>
