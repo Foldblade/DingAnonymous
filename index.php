@@ -61,7 +61,12 @@
                                     <div class="mdui-textfield-helper">支持Markdown语法</div>
                                 </div>
                                 <div class="mdui-col-xs-12 mdui-m-y-3">
-                                    <div class="mdui-typo-caption-opacity mdui-m-y-1">⚠ 由于钉钉机器人的频率限制，全群每分钟仅可通过匿名机器人发送20条消息；若不幸超过限制，则您的消息将不会发送。</div>
+                                    <div class="mdui-typo-caption-opacity mdui-m-y-1">⚠ 由于钉钉机器人的频率限制，全群每分钟仅可通过匿名机器人发送
+                                    <?php
+                                        // 获得机器人数目
+                                        echo 20 * count($config["bots"]);
+                                    ?>
+                                    条消息；若不幸超过限制，则您的消息将不会发送。</div>
                                     <button class="mdui-btn mdui-btn-block mdui-color-theme-accent mdui-ripple" type="button" onclick="sendMessage();" id="send">发送</button>
                                 </div>
                                 <div class="mdui-text-center mdui-m-y-2 mdui-col-xs-12 mdui-hidden" id="loading">
@@ -165,37 +170,52 @@
             let username = document.getElementById("username").value;
             setCookie('DingAnonymous_Username', username, 1);
             let message = document.getElementById("message").value;
-            let httpRequest = new XMLHttpRequest();
-            httpRequest.open('POST', "receiver.php", true);
-            httpRequest.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-            httpRequest.send('username=' + username + '&message=' + message);
-            httpRequest.onreadystatechange = function () {
-                if (httpRequest.readyState == 4 && httpRequest.status == 200) {
-                    let json = JSON.parse(httpRequest.responseText);
-                    if (json["errcode"] == 0 && json["errmsg"] == "ok") {
-                        let time = new Date();
-                        let timeData = time.toLocaleTimeString();
-                        console.log(timeData + "\t"+ message);
-                        let history_tbody = document.getElementById("history_tbody");
-                        let line = document.createElement("tr");
-                        let timeTd = document.createElement("td");
-                        let nodeTimeData = document.createTextNode(timeData);
-                        timeTd.appendChild(nodeTimeData);
-                        let messageTd = document.createElement("td");
-                        let nodeMessage = document.createTextNode(message);
-                        messageTd.appendChild(nodeMessage);
-                        line.appendChild(timeTd);
-                        line.appendChild(messageTd);
-                        history_tbody.appendChild(line);
-                        mdui.mutation();
-                        document.getElementById("message").value = "";
-                    } else {
-                        mdui.alert(json["errmsg"], '错误');
+            if(message == "") {
+                mdui.alert("请输入您要发送的消息！", '错误');
+            } else {
+                let httpRequest = new XMLHttpRequest();
+                httpRequest.open('POST', "receiver.php", true);
+                httpRequest.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                httpRequest.send('username=' + username + '&message=' + message);
+                httpRequest.onreadystatechange = function () {
+                    if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+                        let json = JSON.parse(httpRequest.responseText);
+                        try {
+                            if (typeof json == "object") {
+                                // return true;
+                                ;
+                            }
+                        } catch(e) {
+                            mdui.alert('返回值解析失败。可能是程序配置出错 / 您发送得过于频繁。', '错误');
+                        }
+                        if (json["errcode"] == 0 && json["errmsg"] == "ok") {
+                            let time = new Date();
+                            let timeData = time.toLocaleTimeString();
+                            console.log(timeData + "\t"+ message);
+                            let history_tbody = document.getElementById("history_tbody");
+                            let line = document.createElement("tr");
+                            let timeTd = document.createElement("td");
+                            let nodeTimeData = document.createTextNode(timeData);
+                            timeTd.appendChild(nodeTimeData);
+                            let messageTd = document.createElement("td");
+                            let nodeMessage = document.createTextNode(message);
+                            messageTd.appendChild(nodeMessage);
+                            line.appendChild(timeTd);
+                            line.appendChild(messageTd);
+                            history_tbody.appendChild(line);
+                            
+                            document.getElementById("message").value = "";
+                            mdui.updateTextFields();
+                        } else {
+                            mdui.alert(json["errmsg"], '错误');
+                        }
                     }
-                }
-            };
-            document.getElementById("loading").classList.add("mdui-hidden");
-            document.getElementById("send").disabled=false;
+                };
+            }
+            setTimeout(function() { // 加200ms延迟，防止以为没发出去而进行连点
+                document.getElementById("loading").classList.add("mdui-hidden");
+                document.getElementById("send").disabled=false;
+            }, 200);
         }
         window.onload = function() {
             $username = getCookie('DingAnonymous_Username');
